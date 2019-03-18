@@ -1,0 +1,71 @@
+[
+{
+    "check_in": "12/30/2017",
+    "check_out": "12/30/2017",
+    "service": "Transfer In: Apto Juan Santa María - Hotel Aranjuez Vuelo: IB 6313 Hora: 15H45 Encargado de Recibimiento: PENDIENTE.",
+    "good_to_know": "Le trajet de l'aéroport à votre hôtel peut varier entre une demi-heure à 1h00 selon le traffic.",
+    "telephone": "",
+    "reservation": "factura",
+    "important": "",
+    "handler": "Bernal Carmona",
+    "address": "1 rue des acacias",
+    "gps":
+    {
+        "latitude": "9",
+        "longitude": "-83",
+        "state": "Puntarenas Province",
+        "country": "Costa Rica"
+    },
+    "location":"Caracas"
+},
+{
+    "check_in": "12/30/2017",
+    "check_out": "12/30/2017",
+    "service": "Briefing",
+    "good_to_know": "",
+    "telephone": "",
+    "reservation": "factura",
+    "important": "",
+    "handler": "",
+    "address": "",
+    "gps":
+    {
+        "latitude": "",
+        "longitude": ""
+    },
+    "location":""
+},
+{
+    "check_in": "12/30/2017",
+    "check_out": "12/31/2017",
+    "service": "Alojamiento1 Habitacion Superior doble, LUNA DE MIEL, impuestos incluidos. Sin Desayunos.",
+    "good_to_know": "",
+    "telephone": " (506) 2256-1825",
+    "reservation": "23187",
+    "important": "",
+    "handler": "Hotel Aranjuez",
+    "address": "Calle 19, ave 11 y 13 // 200 norte, 200 oeste  25 sur de la Iglesia Santa Teresa, Barrio Aranjuez, San José",
+    "gps":
+    {
+        "longitude": "",
+        "latitude": ""
+    },
+    "location":"Buenos Aires"
+},
+{
+    "check_in": "12/31/2017",
+    "check_out": "01/02/2018",
+    "service": "Paquete de 3D/2N Pensión Completa en habitación Deluxe.\n Pick up: Hotel Aranjuez.\n Drop off: Guapiles Rest. Río Danta (Conexión Mapache Rent a Car)",
+    "good_to_know": "",
+    "telephone": "2233-6455/",
+    "reservation": "55050",
+    "important": "",
+    "handler": "Rios Tropicales",
+    "address": "",
+    "gps":
+    {
+        "longitude": "",
+        "latitude": ""
+    },
+    "location":"Buenos Aires"
+}]

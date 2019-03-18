@@ -13,14 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::post('generate-doc', 'DocController@generateDoc');
+Route::post('delete-doc', 'DocController@deleteDoc');
 
-Route::post('generate-doc', 'DocController@send');
-
-Route::get('delete', 'DocController@delete');
-
-Route::post('test', 'DocController@test');
-
-// get http://localhost/tests/LARAVEL/pdf/public/api/generate-doc

@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('/', 'DocController@generate');
 
+Route::get('/', 'DocController@generateDoc');

@@ -6,66 +6,68 @@ use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
-
+use App\Helpers\RoadBook;
+use App\Helpers\DocManipulator;
 
 class DocController extends Controller
 {
-    public function generate(Request $req)
+
+  public function generateDoc(Request $req)
     {
-    	// Retrieve data from request, some json
-    	$data = ['title' => 'Welcome to HDTuto.com'];
-  
-    	// load view template
-         $pdf = PDF::loadView('roadmap/myPDF', $data);
+      
+      // Retrieve input param from POST request
+        $param = $req->input('param') ?? [];
+        //$data = [];
+        $data = $req->input('data') ?? [];
+       	$lang = $param['lang'] ?? "fr" ; 
+       	$format = $param['format'] ?? "docx"; 
 
-    	// generate and return pdf
-        return $pdf->stream();
-    	
-    }
 
-    public function send(Request $req)
-    {
+      if (!empty($data)) {
 
-    	$param = $req->input('param');
-    	$data = $req->input('data');
-    	// Retrieve data from request, some json
-       	$lang = $param['lang'] ?? "I don't know !" ;
-       	$format = $param['format'] ?? "I don't know !";
-       
-  		$data = ['lang' => $lang, 'format' => $format, 'data' => $data];
+        $pathOutput = public_path('storage/roadbook/');
+        $pathTemplates =  public_path('storage/templates/'.$lang.'/');
+      
+        // filter special characters
+        foreach ($data as &$item) {
+        	$good_to_know = $item["good_to_know_".$lang] ?? ""; 
+        	$item["good_to_know"]=$good_to_know;
+        	foreach ($item as $key => &$value) {
+        		$value = htmlspecialchars($value);
+        	}
+        }
 
-    	// load view(check langage first : fr or es and extension : pdf or docx) template and pass data
 
-    	$current = time();
-  		$fileName = 'roadMap'.$current.'.pdf';
-  		$filePath='storage/roadmap/'.$fileName;
 
-        $pdf = PDF::loadView('roadmap/myPDF', $data)->save($filePath);
+        $roadBook = new RoadBook($data, $pathTemplates, $lang, $pathOutput); // Our RoadBook instance
+
+        if(isset($param["full"]) && $param["full"] == "yes") // generate full roadbook
+        {
+            $url = $roadBook->generateFullRoadBook();
+        }
+        else
+        {
+            $url = $roadBook->generateRoadBook();
+        }
         
-    	// generate and return pdf
-        return response()->json(['url' => asset($filePath)]);
+        chmod($url, 0755); // to avoid reading issues in OVH 
+        $fileName = basename($url); // fileName document_4554.docx
+        $url = asset('storage/roadbook/'.$fileName); //generate URL
+        return response()->json(['url' => $url]);
+       
+      }
+      else
+      {
+        return response()->json(['data' => "no data passed"]);
+      }
+    
     }
 
-    // clear storage pdf and docx - get request
-    public function delete(Request $req)
+    public function deleteDoc(Request $req)
     {
-    	$files = glob(public_path('storage/roadmap/*')); // get all file names
-		foreach($files as $file){ // iterate files
-		  if(is_file($file))
-		    unlink($file); // delete file
-		}
-    	
-    	//Storage::delete(public_path('storage/roadMap1550751148.pdf'));
+      $doc = $req->input("name");
 
-
+      DocManipulator::deleteFileList([$doc]);
     }
 
-    public function test(Request $req)
-    {
-  
-    	return json_encode($req->input('data'));
-
-
-    }
 }
