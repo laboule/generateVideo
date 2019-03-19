@@ -237,7 +237,10 @@ $section = $phpWord->addSection(array('paperSize'=>'Letter',"align"=>'left'));
    $textrun->addImage($imgSrc); 
    $textrun->addText($beginning["good_to_know"],'bold');
    $textrun->addTextBreak();
-   $textrun->addText($data["good_to_know"],'basic');
+
+   // transform \n into word text break !
+   $good_to_know = preg_replace('#\n#','</w:t><w:br/><w:t>',$data["good_to_know"]);
+   $textrun->addText($good_to_know,'basic');
  }
  $section->addTextBreak(1,[],'left');
 
