@@ -12,4 +12,5 @@
 */
 
 
-Route::get('/', 'DocController@generateDoc');
+
+//Route::get('/', 'VideoController@generateVideo');

@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::post('generate-doc', 'DocController@generateDoc');
 Route::post('delete-doc', 'DocController@deleteDoc');
 
+//http://localhost/projects/MORPHO_API/public/api/generate-video
+Route::post('generate-video', 'VideoController@generateVideo');
+
