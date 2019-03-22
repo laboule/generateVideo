@@ -25,18 +25,14 @@ class VideoController extends Controller
 	    
 		// CREATE VIDEO
 		$video = $vm->createVideoFromUrls($urls);
-		return 123;
 		 //echo $res;
 		
 		///// UPLOAD VIDEO TO VOO
-		$voo = $vm->uploadVideoToVoo($video);
-		 //echo $voo;
+		 $voo = $vm->uploadVideoToVoo($video);
+		//  //echo $voo;
 
-		///// UPDATE COLUMN VIDEO URL IN KNACK
-
-		// add URL
-		 
-		 $data = $vm->addUrlToKnack("5c91158c7af1ff085c54f5e6",$voo);
+		// ///// UPDATE COLUMN VIDEO URL IN KNACK
+		 $data = $vm->addUrlToKnack($idItin,$voo);
 
 		///// SEND RESPONSE MESSAGE
  		return $voo;

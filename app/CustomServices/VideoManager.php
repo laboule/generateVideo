@@ -68,20 +68,20 @@ class VideoManager
 			// Add audio
 			$addAudio = `{$ffmpeg} -i {$outputVideoNoAudio} -i {$musicPath} -codec copy -shortest {$outputVideo} >> {$logVideo} 2>&1`;
 
-			// compress video (less size)
+			// compress video (reduce file size)
 
-			$compressVeryFastCRF = `{$ffmpeg} -i {$outputVideo} -vcodec libx264 -crf 31 -preset veryfast -c:a copy {$outputVideoComp} >> {$logVideo} 2>&1`;
+			// $compressVeryFastCRF = `{$ffmpeg} -i {$outputVideo} -vcodec libx264 -crf 31 -preset veryfast -c:a copy {$outputVideoComp} >> {$logVideo} 2>&1`;
 
 			// $compress = `ffmpeg -i {$outputVideo} -vcodec h264 -acodec aac {$outputVideoComp}`;
 			// Delete temp video (without audio) and list.txt
 			unlink($outputVideoNoAudio);
-			unlink($outputVideo);
+			//unlink($outputVideo);
 			unlink("list.txt");
 
 			// return final video path
 			//echo realpath(__DIR__.'/'.$outputVideo);
-			chmod($outputVideoComp, 0755);
-			return $outputVideoComp;
+			chmod($outputVideo, 0755);
+			return $outputVideo;
 		}
 
 		// no urls provided
