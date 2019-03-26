@@ -11,6 +11,6 @@
 |
 */
 
+// for testing 
 
-
-//Route::get('/', 'VideoController@generateVideo');
+Route::get('/', 'VideoController@generateVideo');

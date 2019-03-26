@@ -9,26 +9,30 @@ class VideoController extends Controller
 {
     public function generateVideo(Request $request)
     {
-
+    	return 123;
     	// Retrieve input from POST request
-        $videoNames = $request->input('videos') ?? [];
-        $idItin = $request->input('id_itin') ?? "";
-        
-    	$ffmpeg = "ffmpeg"; //local dev - PATH windows !
-    	//binaries
-    	//$ffmpeg = base_path().'/ffmpeg'; 
- 		$vm = new VideoManager($ffmpeg);
+
+        // $videoNames = $request->input('videos') ?? null;
+        // $idItin = $request->input('id_itin') ?? null;
+        // $name = $request->input('name') ?? null;
+
+        $videoNames = ['san_jose','tortugero','fjfj'];
+
+ 		$vm = new VideoManager();
 
 		 // GET corresponding URLS 
 	    $urls = $vm->getURLsFromNames($videoNames);
-	    
+	    var_dump($urls);
+	    return;
 	    
 		// CREATE VIDEO
 		$video = $vm->createVideoFromUrls($urls);
+		
 		 //echo $res;
 		
 		///// UPLOAD VIDEO TO VOO
-		 $voo = $vm->uploadVideoToVoo($video);
+		$videoName="Video "+$name;
+		$voo = $vm->uploadVideoToVoo($video,$videoName);
 		//  //echo $voo;
 
 		// ///// UPDATE COLUMN VIDEO URL IN KNACK

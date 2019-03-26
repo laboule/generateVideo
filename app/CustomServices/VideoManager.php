@@ -11,13 +11,11 @@ use GuzzleHttp\Psr7\Response;
 class VideoManager 
 {
 	
-	private $ffmpeg,$music,$vooKey,$vooApi,$knackAppID,$knackAPI,$knackKey;
+	private $music,$vooKey,$vooApi,$knackAppID,$knackAPI,$knackKey;
 	
 
-	public function __construct($ffmpeg)
+	public function __construct()
 	{
-	
-		$this->ffmpeg=$ffmpeg;
 
 		$this->music = realpath(public_path('storage/audio/music.mp3'));
 		$this->vooKey = env("VOO_API_KEY", "somedefaultvalue");
@@ -25,7 +23,6 @@ class VideoManager
 		$this->knackAppID = env("KNACK_APP_ID", "somedefaultvalue");
 		$this->knackAPI = env("KNACK_API_URL", "somedefaultvalue");
 		$this->knackKey = env("KNACK_API_KEY", "somedefaultvalue");
-
 	}
 	
 	public function createVideoFromUrls(array $urls=[]): ?string
@@ -63,10 +60,10 @@ class VideoManager
 // for debian ovh add "nice" at begining of command for CPU usage !
 			// Concatenate videos - without audio
 			
-			$concat = `{$ffmpeg} -safe 0 -protocol_whitelist file,http,https,tcp,tls -f concat -i list.txt -c copy -an {$outputVideoNoAudio} >> {$logVideo} 2>&1`;
+			$concat = `ffmpeg -safe 0 -protocol_whitelist file,http,https,tcp,tls -f concat -i list.txt -c copy -an {$outputVideoNoAudio} >> {$logVideo} 2>&1`;
 
 			// Add audio
-			$addAudio = `{$ffmpeg} -i {$outputVideoNoAudio} -i {$musicPath} -codec copy -shortest {$outputVideo} >> {$logVideo} 2>&1`;
+			$addAudio = `ffmpeg -i {$outputVideoNoAudio} -i {$musicPath} -codec copy -shortest {$outputVideo} >> {$logVideo} 2>&1`;
 
 			// compress video (reduce file size)
 
@@ -74,9 +71,9 @@ class VideoManager
 
 			// $compress = `ffmpeg -i {$outputVideo} -vcodec h264 -acodec aac {$outputVideoComp}`;
 			// Delete temp video (without audio) and list.txt
-			unlink($outputVideoNoAudio);
+			//unlink($outputVideoNoAudio);
 			//unlink($outputVideo);
-			unlink("list.txt");
+			//unlink("list.txt");
 
 			// return final video path
 			//echo realpath(__DIR__.'/'.$outputVideo);
@@ -88,13 +85,15 @@ class VideoManager
 		return null;
 	}
 
-	public function uploadVideoToVoo(?string $videoPath)
+	public function uploadVideoToVoo(string $videoPath, ?string $videoName)
 	{
 
+		$name = $videoName ?? 'video_'.uniqid();
 
 		// Guzzle Client
 		$client = new Client(['verify' => false]); //SSL diable for local testing
 
+		// Send Video
 		$response = $client->request(
 			'POST',  
 			// from env -config(app.vooUrlAPI)
@@ -104,12 +103,11 @@ class VideoManager
 				[
 	       	 		[
 		            'name'     => 'vooKey',
-		            // from env ? config(app.vooKey)
 		            'contents' => $this->vooKey
 	        		],
 	        		[
 		            'name'     => 'name',
-		            'contents' => 'video_'.uniqid()
+		            'contents' => $name
 	        		],
 	        		[
 		            'name'     => 'create',
