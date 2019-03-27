@@ -27,18 +27,18 @@ class VideoManager
 	
 	public function createVideoFromUrls(array $urls=[]): ?string
 	{
-		$ffmpeg = $this->ffmpeg;
+		
 		$musicPath = $this->music;
 		if (!empty($urls)) {
 			// Add urls to list.txt
 			foreach ($urls as $key => $url) {
 				$text = "file '$url' \n";
 				if ($key===0) {
-					file_put_contents("list.txt", $text);
+					file_put_contents("storage/list.txt", $text);
 				}
 				else
 				{
-					file_put_contents("list.txt", $text,FILE_APPEND);	
+					file_put_contents("storage/list.txt", $text,FILE_APPEND);	
 				}
 				
 			}
@@ -60,7 +60,7 @@ class VideoManager
 // for debian ovh add "nice" at begining of command for CPU usage !
 			// Concatenate videos - without audio
 			
-			$concat = `ffmpeg -safe 0 -protocol_whitelist file,http,https,tcp,tls -f concat -i list.txt -c copy -an {$outputVideoNoAudio} >> {$logVideo} 2>&1`;
+			$concat = `ffmpeg -safe 0 -protocol_whitelist file,http,https,tcp,tls -f concat -i storage/list.txt -c copy -an {$outputVideoNoAudio} >> {$logVideo} 2>&1`;
 
 			// Add audio
 			$addAudio = `ffmpeg -i {$outputVideoNoAudio} -i {$musicPath} -codec copy -shortest {$outputVideo} >> {$logVideo} 2>&1`;
@@ -71,12 +71,9 @@ class VideoManager
 
 			// $compress = `ffmpeg -i {$outputVideo} -vcodec h264 -acodec aac {$outputVideoComp}`;
 			// Delete temp video (without audio) and list.txt
-			//unlink($outputVideoNoAudio);
-			//unlink($outputVideo);
-			//unlink("list.txt");
-
-			// return final video path
-			//echo realpath(__DIR__.'/'.$outputVideo);
+			unlink($outputVideoNoAudio);
+			unlink("storage/list.txt");
+                        
 			chmod($outputVideo, 0755);
 			return $outputVideo;
 		}
@@ -128,7 +125,10 @@ class VideoManager
 
 			if ($response->getBody()) 
 			{
+			    unlink($videoPath);
 			    return $response->getBody(); // URL voo
+				// delete Video
+			
 			}
 			return null;
 	}
